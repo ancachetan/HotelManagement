@@ -26,11 +26,16 @@ public class JSONDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if (hotelRepository.count() > 0) {
+            System.out.println("Data already loaded");
+            return;
+        }
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
         InputStream inputStream = new ClassPathResource(JSON_FILE_NAME).getInputStream();
-        List<Hotel> hotels = mapper.readValue(inputStream, new TypeReference<>() {});
+        List<Hotel> hotels = mapper.readValue(inputStream, new TypeReference<>() {
+        });
         for (Hotel hotel : hotels) {
             for (Room room : hotel.getRooms()) {
                 room.setType(RoomType.fromValue(room.getType().getValue()));
