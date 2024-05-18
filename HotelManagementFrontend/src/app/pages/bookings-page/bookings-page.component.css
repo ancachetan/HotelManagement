@@ -1,0 +1,14 @@
+.card {
+  width: 100%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.btn {
+  margin-top: 10px;
+}
+

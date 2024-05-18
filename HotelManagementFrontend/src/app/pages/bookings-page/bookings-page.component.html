@@ -1,0 +1,51 @@
+<app-navigation-bar [loggedUserId]="loggedUserId"></app-navigation-bar>
+<div class="container mt-5">
+  <div class="row">
+    <div *ngFor="let booking of bookings" class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Booking ID: {{ booking.id }}</h5>
+          <p class="card-text">Check-In Date: {{ booking.checkInDate }}</p>
+          <p class="card-text">Check-Out Date: {{ booking.checkOutDate }}</p>
+          <p class="card-text">Hotel: {{ booking.hotelName }}</p>
+          <p class="card-text">Room type: {{ booking.roomType }}</p>
+          <p class="card-text">Price: {{ booking.price }}</p>
+          <p class="card-text">
+            Status: {{ booking.canceled ? 'Canceled' : 'Active' }}
+          </p>
+          <button class="btn btn-danger" (click)="cancelBooking(booking.id!)" [disabled]="booking.canceled">Cancel
+            booking
+          </button>
+          <button class="btn btn-warning" (click)="findAvailableRooms(booking)" [disabled]="booking.canceled">Update
+            room
+          </button>
+          <button [disabled]="!isFeedbackAvailable(booking)" (click)="showFeedbackInput(booking)"
+                  class="btn btn-info">
+            Give feedback
+          </button>
+          <div *ngIf="isFeedbackInputActive && booking.id === selectedBookingId" class="input-group mt-2">
+            <input [(ngModel)]="feedbackComment" class="form-control" placeholder="Enter comment">
+            <div>
+              <button class="btn btn-outline-secondary mb-2 ms-1" (click)="addFeedback()">Add</button>
+            </div>
+          </div>
+          <div *ngIf="selectedHotelId && selectedBookingId === booking.id" ngbAccordion>
+            <div *ngFor="let room of availableRooms" ngbAccordionItem>
+              <h2 ngbAccordionHeader>
+                <button ngbAccordionButton>Room {{ room.roomNumber }}</button>
+              </h2>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <p>Type: {{ room.type }}</p>
+                  <p>Price: {{ room.price }}</p>
+                  <button class="btn btn-primary me-2" (click)="changeRoom(room)">Book Room</button>
+                  <button class="btn btn-danger" (click)="cancelRoomUpdate()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
